@@ -36,6 +36,8 @@ public class Logistics_Management_System {
 
             if (choice == 1) {
                 manageCities();
+            } else if (choice == 5) {
+                break;
             } else {
                 //return;
             }
@@ -63,9 +65,9 @@ public class Logistics_Management_System {
             if (c == 1) {
                 addCity();
             } else if (c == 2) {
-                //renameCity();
+                renameCity();
             } else if (c == 3) {
-                //removeCity();
+                removeCity();
             } else if (c == 4) {
                 listCities();
             } else if (c == 5) {
@@ -114,6 +116,46 @@ public class Logistics_Management_System {
         }
     }
 
- 
+    //function for rename a city name
+    static void renameCity() {
+        listCities(); //show all cities
+
+        System.out.print("Enter city index to rename: ");
+        int i = scan.nextInt();
+        scan.nextLine();
+
+        if (i < 0 || i > cityCount) {
+            System.out.println("Invalid index !");
+            return;
+        }
+        System.out.print("Enter new name: ");
+        cities[(i - 1)] = scan.nextLine();
+        System.out.println("Renamed successfully.");
+    }
+
+    //function for remove a city
+    static void removeCity() {
+        listCities();
+
+        System.out.print("Enter index to remove: ");
+        int i = scan.nextInt();
+        scan.nextLine();
+
+        int index = i - 1;
+
+        if (i < 0 || i >= cityCount) {
+            System.out.println("Invalid index !");
+            return;
+        }
+
+        // Shift elements left starting from the removed index
+        for (int j = index; j < cityCount - 1; j++) {
+            cities[(j)] = cities[j + 1];
+        }
+        cities[cityCount - 1] = null;   // Clear the last element
+
+        cityCount--;
+        System.out.println("city Removed.");
+    }
 
 }
