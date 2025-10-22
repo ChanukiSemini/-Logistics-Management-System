@@ -9,7 +9,6 @@ import java.util.Scanner;
 import java.io.*;
 import java.util.InputMismatchException;
 
-
 /**
  *
  * @author chanuki
@@ -344,10 +343,16 @@ public class Logistics_Management_System {
         }
     }
 
+    
     //function for show intercity distance
     static void showDistanceTable() {
 
-        System.out.print(" \n  ......Intercity Distances......\n");
+        
+        if(cityCount<2){
+            System.out.println("Empty.");
+        }
+        else{
+                System.out.print(" \n  ......Intercity Distances......\n");
         System.out.print("      ");
 
         for (int j = 0; j < cityCount; j++) {
@@ -369,6 +374,8 @@ public class Logistics_Management_System {
 
             System.out.println();
         }
+        }
+        
     }
 
     //function for create a Request Handling
@@ -483,6 +490,7 @@ public class Logistics_Management_System {
                 } else {
                     System.out.println("Order Cannot Delivary !");
                 }
+                break;
 
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
@@ -569,59 +577,72 @@ public class Logistics_Management_System {
     static void saveRoutes() {
         try (FileWriter write = new FileWriter("routes.txt")) {
 
-            write.write(cityCount);
+            // Save city count as text
+            write.write(String.valueOf(cityCount) + "\n");
 
+            // Save city names, comma-separated
             for (int i = 0; i < cityCount; i++) {
                 write.write(cities[i]);
+                if (i < cityCount - 1) {
+                    write.write(",");
+                }
             }
+            write.write("\n");
+
+            // Save distance matrix
             for (int i = 0; i < cityCount; i++) {
                 for (int j = 0; j < cityCount; j++) {
-
-                    write.write(interCityDistance[i][j]);
-
+                    write.write(String.valueOf(interCityDistance[i][j]));
                     if (j < cityCount - 1) {
                         write.write(",");
                     }
                 }
-                write.write("");
+                write.write("\n");
             }
-            write.close();
+
             System.out.println("routes.txt Successfully saved.");
 
         } catch (IOException e) {
-            System.out.println(e.getMessage() + "Error saving routes.");
+            System.out.println(e.getMessage() + " Error saving routes.");
         }
     }
 
     //function for load saved routed when starting the program
-    static void loadRoutes() {
+  static void loadRoutes() {
+    File file = new File("routes.txt");
 
-        File file = new File("routes.txt");
-
-        if (!file.exists()) {
-            return;
-        }
-        try (Scanner scanner = new Scanner(file)) {
-
-            cityCount = Integer.parseInt(scanner.nextLine().trim());
-
-            for (int i = 0; i < cityCount; i++) {
-                cities[i] = scanner.nextLine();
-            }
-            for (int i = 0; i < cityCount; i++) {
-                String[] p = scanner.nextLine().split(",");
-                for (int j = 0; j < cityCount; j++) {
-                    interCityDistance[i][j] = Integer.parseInt(p[j]);
-                }
-            }
-            scanner.close();
-
-            System.out.println("routes.txt loaded Successfully.");
-
-        } catch (IOException e) {
-            System.out.println(e.getMessage() + " Error loading routes.");
-        }
+    if (!file.exists()) {
+        return;
     }
+
+    try (Scanner scanner = new Scanner(file)) {
+
+        // Read city count
+        cityCount = Integer.parseInt(scanner.nextLine().trim());
+
+        // Read city names (comma-separated)
+        String[] cityLine = scanner.nextLine().split(",");
+        for (int i = 0; i < cityLine.length; i++) {
+            cities[i] = cityLine[i].trim();
+        }
+
+        // Read distance matrix
+        for (int i = 0; i < cityCount; i++) {
+            String[] p = scanner.nextLine().split(",");
+            for (int j = 0; j < cityCount; j++) {
+                interCityDistance[i][j] = Integer.parseInt(p[j].trim());
+            }
+        }
+
+        System.out.println("routes.txt loaded Successfully.");
+
+    } catch (FileNotFoundException e) {
+        System.out.println("File not found: " + e.getMessage());
+    } catch (Exception e) {
+        System.out.println("Error loading routes: " + e.getMessage());
+    }
+}
+
 
     //function for save delivery history
     static void saveDeliveries() {
