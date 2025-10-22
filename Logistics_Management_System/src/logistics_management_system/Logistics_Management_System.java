@@ -46,12 +46,13 @@ public class Logistics_Management_System {
     static final int MAX_DELIVERY_ITEMS = 50;
     static int deliveryCount = 0;
 
-    //To store 50 deliveries maximum
+    //To store 50 deliveries maximum for (Cost, Time, and Fuel Calculations )
     static int[] fromCity = new int[MAX_DELIVERY_ITEMS];
     static int[] toCity = new int[MAX_DELIVERY_ITEMS];
     static int[] distance = new int[MAX_DELIVERY_ITEMS];
     static int[] vehicleType = new int[MAX_DELIVERY_ITEMS];
     static int[] weight = new int[MAX_DELIVERY_ITEMS];
+
     static double[] baseCost = new double[MAX_DELIVERY_ITEMS];
     static double[] fuelUsed = new double[MAX_DELIVERY_ITEMS];
     static double[] fuelCost = new double[MAX_DELIVERY_ITEMS];
@@ -326,9 +327,9 @@ public class Logistics_Management_System {
                 System.out.println("Add minimum 2 or more cities first!");
                 return;
             }
-            
+
             System.out.println("\n.........Order details .........\n");
-            
+
             listCities(); // show all cities 
 
             System.out.print("Enter the index of Source City: ");
@@ -369,7 +370,53 @@ public class Logistics_Management_System {
                 return;
             }
 
+            // find least distance
+            int dist = findShortestPath(SCity, DesCity);
+            if (dist >= 999999) {
+                System.out.println("No route available.");
+                return;
+            }
+            
+            System.out.println("Min Distance" + dist);
+            // 
+
+
         }
 
     }
+
+    //Finding The Least-Cost Route (Least-Distance)
+    static int findShortestPath(int src, int dest) {
+        
+        int n = cityCount;
+        int[] d = new int[n];
+        boolean[] used = new boolean[n];
+        for (int i = 0; i < n; i++) {
+            d[i] = 999999;
+            used[i] = false;
+        }
+        d[src] = 0;
+
+        for (int i = 0; i < n; i++) {
+            int v = -1;
+            for (int j = 0; j < n; j++) {
+                if (!used[j] && (v == -1 || d[j] < d[v])) {
+                    v = j;
+                }
+            }
+            if (d[v] == 999999) {
+                break;
+            }
+            used[v] = true;
+            for (int j = 0; j < n; j++) {
+                if (interCityDistance[v][j] < 999999) {
+                    if (d[v] + interCityDistance[v][j] < d[j]) {
+                        d[j] = d[v] + interCityDistance[v][j];
+                    }
+                }
+            }
+        }
+        return d[dest];
+    }
+
 }
