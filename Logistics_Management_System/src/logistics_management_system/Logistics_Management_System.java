@@ -22,6 +22,7 @@ public class Logistics_Management_System {
     // Distance Management 
     static int[][] interCityDistance = new int[MAX_CITY_COUNT][MAX_CITY_COUNT];
 
+    //set 0 to self distance
     static void setSelfDistance() {
         for (int i = 0; i < MAX_CITY_COUNT; i++) {
             for (int j = 0; j < MAX_CITY_COUNT; j++) {
@@ -73,44 +74,46 @@ public class Logistics_Management_System {
         loadDeliveries();  // load saved delivery history
 
         while (true) {
+            try {
+                System.out.println("\n ==== LOGISTICS MANAGEMENT SYSTEM ====");
+                System.out.println("|                                     |");
+                System.out.println("|   1. City Management                |");
+                System.out.println("|   2. Distance Management            |");
+                System.out.println("|   3. Create Delivery Request        |");
+                System.out.println("|   4. Reports                        |");
+                System.out.println("|   5. Save and Exit                  |");
+                System.out.println(" -------------------------------------");
+                System.out.print("Enter your choice: ");
+                int choice = scan.nextInt();
 
-            System.out.println("\n ==== LOGISTICS MANAGEMENT SYSTEM ====");
-            System.out.println("|                                     |");
-            System.out.println("|   1. City Management                |");
-            System.out.println("|   2. Distance Management            |");
-            System.out.println("|   3. Create Delivery Request        |");
-            System.out.println("|   4. Reports                        |");
-            System.out.println("|   5. Save and Exit                  |");
-            System.out.println(" -------------------------------------");
-            System.out.print("Enter your choice: ");
-            int choice = scan.nextInt();
+                switch (choice) {
+                    case 1:
+                        manageCities();
+                        break;
+                    case 2:
+                        manageDistances();
+                        break;
+                    case 3:
+                        createDelivery();
+                        break;
+                    case 4:
+                        showReports();
+                        break;
+                    case 5:
+                        saveRoutes();
+                        saveDeliveries();
 
-            switch (choice) {
-                case 1:
-                    manageCities();
-                    break;
-                case 2:
-                    manageDistances();
-                    break;
-                case 3:
-                    createDelivery();
-                    break;
-                case 4:
-                    showReports();
-                    break;
-                case 5:
-                    saveRoutes();
-                    saveDeliveries();
+                        System.out.println("Saved and Exit.");
+                        return;
+                    //System.exit(0);
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                        break;
 
-                    System.out.println("Saved and Exit.");
-                    return;
-                //System.exit(0);
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-                    break;
-
+                }
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
             }
-
         }
 
     }
@@ -119,67 +122,74 @@ public class Logistics_Management_System {
     static void manageCities() {
 
         while (true) {
+            try {
+                System.out.println("\n................................");
+                System.out.println("        --- City Management ---       \n");
+                System.out.println(" 1. Add City                          ");
+                System.out.println(" 2. Rename City                      ");
+                System.out.println(" 3. Remove City                       ");
+                System.out.println(" 4. Show all Cities                   ");
+                System.out.println(" 5. Back to Main Menu                 ");
+                System.out.println("..................................");
+                System.out.print("Enter your choice: ");
 
-            System.out.println("\n................................");
-            System.out.println("        --- City Management ---       \n");
-            System.out.println(" 1. Add City                          ");
-            System.out.println(" 2. Rename City                      ");
-            System.out.println(" 3. Remove City                       ");
-            System.out.println(" 4. Show all Cities                   ");
-            System.out.println(" 5. Back to Main Menu                 ");
-            System.out.println("..................................");
-            System.out.print("Enter your choice: ");
+                int input = scan.nextInt();
+                scan.nextLine(); // consume newline
 
-            int input = scan.nextInt();
-            scan.nextLine(); // consume newline
-
-            switch (input) {
-                case 1:
-                    addCity();
-                    break;
-                case 2:
-                    renameCity();
-                    break;
-                case 3:
-                    removeCity();
-                    break;
-                case 4:
-                    listCities();
-                    break;
-                case 5:
-                    return; //  back to main menu
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-                    break;
+                switch (input) {
+                    case 1:
+                        addCity();
+                        break;
+                    case 2:
+                        renameCity();
+                        break;
+                    case 3:
+                        removeCity();
+                        break;
+                    case 4:
+                        listCities();
+                        break;
+                    case 5:
+                        return; //  back to main menu
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                        break;
+                }
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
             }
-
         }
     }
 
     //function for add new city
     static void addCity() {
 
-        //check whether the maximun city limit has reached or not
-        if (cityCount >= MAX_CITY_COUNT) {
-            System.out.println("Cannot added more cities. City limit reached ! ");
-            return;
-        }
-
-        System.out.print("Enter city name: ");
-        String cityName = scan.nextLine();
-
-        System.out.println("\n");
-
-        //checking the entered name exits or not
-        for (int i = 0; i < cityCount; i++) {
-            if (cities[i].toLowerCase().equals(cityName.toLowerCase())) {
-                System.out.println("City " + cityName + " is already exists !");
+        try {
+            //check whether the maximun city limit has reached or not
+            if (cityCount >= MAX_CITY_COUNT) {
+                System.out.println("Cannot added more cities. City limit reached ! ");
                 return;
             }
+
+            System.out.print("Enter city name: ");
+            String cityName = scan.nextLine();
+
+            System.out.println("\n");
+
+            //checking the entered name exits or not
+            for (int i = 0; i < cityCount; i++) {
+                if (cities[i].toLowerCase().equals(cityName.toLowerCase())) {
+                    System.out.println("City " + cityName + " is already exists !");
+                    return;
+                }
+            }
+            //otherwise, add the name to the list
+            cities[cityCount++] = cityName;
+            System.out.println(cityName + " Added to the List ! ");
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
-        //otherwise, add the name to the list
-        cities[cityCount++] = cityName;
-        System.out.println(cityName + " Added to the List ! ");
     }
 
     //function for show all cities
@@ -198,72 +208,88 @@ public class Logistics_Management_System {
     static void renameCity() {
         listCities(); //show all cities
 
-        System.out.print("Enter city index to rename: ");
-        int i = scan.nextInt();
-        scan.nextLine();
+        try {
+            System.out.print("Enter city index to rename: ");
+            int i = scan.nextInt();
+            scan.nextLine();
 
-        if (i < 0 || i > cityCount) {
-            System.out.println("Invalid index !");
-            return;
+            if (i < 0 || i > cityCount) {
+                System.out.println("Invalid index !");
+                return;
+            }
+            System.out.print("Enter new name: ");
+            cities[(i - 1)] = scan.nextLine();
+            System.out.println("Renamed successfully.");
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
-        System.out.print("Enter new name: ");
-        cities[(i - 1)] = scan.nextLine();
-        System.out.println("Renamed successfully.");
     }
 
     //function for remove a city
     static void removeCity() {
         listCities();
 
-        System.out.print("Enter index to remove: ");
-        int i = scan.nextInt();
-        scan.nextLine();
+        try {
+            System.out.print("Enter index to remove: ");
+            int i = scan.nextInt();
+            scan.nextLine();
 
-        int index = i - 1;
+            int index = i - 1;
 
-        if (i < 0 || i >= cityCount) {
-            System.out.println("Invalid index !");
-            return;
+            if (i < 0 || i >= cityCount) {
+                System.out.println("Invalid index !");
+                return;
+            }
+
+            // Shift elements left starting from the removed index
+            for (int j = index; j < cityCount - 1; j++) {
+                cities[(j)] = cities[j + 1];
+            }
+            cities[cityCount - 1] = null;   // Clear the last element
+
+            cityCount--;
+            System.out.println("city Removed.");
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
-
-        // Shift elements left starting from the removed index
-        for (int j = index; j < cityCount - 1; j++) {
-            cities[(j)] = cities[j + 1];
-        }
-        cities[cityCount - 1] = null;   // Clear the last element
-
-        cityCount--;
-        System.out.println("city Removed.");
     }
 
     // Distance Management 
     static void manageDistances() {
 
         while (true) {
-            System.out.println("\n................................");
-            System.out.println("    --- Distance Management ---    \n");
-            System.out.println("  1. Add/Edit Distance              ");
-            System.out.println("  2. Show Distance Table            ");
-            System.out.println("  3. Back to Main Menu                 ");
-            System.out.println("..................................");
 
-            System.out.print("Enter your choice: ");
-            int input = scan.nextInt();
-            scan.nextLine(); // consume newline
-            System.out.println("\n");
+            try {
+                System.out.println("\n................................");
+                System.out.println("    --- Distance Management ---    \n");
+                System.out.println("  1. Add/Edit Distance              ");
+                System.out.println("  2. Show Distance Table            ");
+                System.out.println("  3. Back to Main Menu                 ");
+                System.out.println("..................................");
 
-            switch (input) {
-                case 1:
-                    editDistance();
-                    break;
-                case 2:
-                    showDistanceTable();
-                    break;
-                case 3:
-                    return;
-                default:
-                    System.out.println("Invalid.");
-                    break;
+                System.out.print("Enter your choice: ");
+                int input = scan.nextInt();
+                scan.nextLine(); // consume newline
+                System.out.println("\n");
+
+                switch (input) {
+                    case 1:
+                        editDistance();
+                        break;
+                    case 2:
+                        showDistanceTable();
+                        break;
+                    case 3:
+                        return;
+                    default:
+                        System.out.println("Invalid.");
+                        break;
+                }
+
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
             }
         }
     }
@@ -271,32 +297,37 @@ public class Logistics_Management_System {
     //function for edit distance
     static void editDistance() {
 
-        if (cityCount < 2) {
-            System.out.println("Need  atleast 2 cities to Add distance !");
-            return;
+        try {
+            if (cityCount < 2) {
+                System.out.println("Need  atleast 2 cities to Add distance !");
+                return;
+            }
+            listCities();
+
+            System.out.print("Source City index: ");
+            int SourceCity = scan.nextInt() - 1;
+            scan.nextLine(); // consume newline
+
+            System.out.print("Destination City index: ");
+            int DesCity = scan.nextInt() - 1;
+            scan.nextLine(); // consume newline
+
+            if (SourceCity < 0 || SourceCity >= cityCount || DesCity < 0 || DesCity >= cityCount || SourceCity == DesCity) {
+                System.out.println("Invalid Input !.");
+                return;
+            }
+            System.out.print("Enter distance (km): ");
+            int dist = scan.nextInt();
+            scan.nextLine(); // consume newline
+
+            interCityDistance[SourceCity][DesCity] = dist;
+            interCityDistance[DesCity][SourceCity] = dist;
+
+            System.out.println("Distance updated.");
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
-        listCities();
-
-        System.out.print("Source City index: ");
-        int SourceCity = scan.nextInt() - 1;
-        scan.nextLine(); // consume newline
-
-        System.out.print("Destination City index: ");
-        int DesCity = scan.nextInt() - 1;
-        scan.nextLine(); // consume newline
-
-        if (SourceCity < 0 || SourceCity >= cityCount || DesCity < 0 || DesCity >= cityCount || SourceCity == DesCity) {
-            System.out.println("Invalid Input !.");
-            return;
-        }
-        System.out.print("Enter distance (km): ");
-        int dist = scan.nextInt();
-        scan.nextLine(); // consume newline
-
-        interCityDistance[SourceCity][DesCity] = dist;
-        interCityDistance[DesCity][SourceCity] = dist;
-
-        System.out.println("Distance updated.");
     }
 
     //function for show intercity distance
@@ -330,113 +361,118 @@ public class Logistics_Management_System {
     static void createDelivery() {
 
         while (true) {
-            if (cityCount < 2) {
-                System.out.println("Add minimum 2 or more cities first!");
-                return;
+
+            try {
+                if (cityCount < 2) {
+                    System.out.println("Add minimum 2 or more cities first!");
+                    return;
+                }
+
+                System.out.println("\n.........Order details .........\n");
+
+                listCities(); // show all cities 
+
+                System.out.print("Enter the index of Source City: ");
+                int SCity = scan.nextInt() - 1;
+                scan.nextLine(); // consume newline
+
+                System.out.print("Enter the index of Desination City: ");
+                int DesCity = scan.nextInt() - 1;
+                scan.nextLine(); // consume newline
+
+                if (SCity == DesCity || SCity < 0 || DesCity < 0 || SCity >= cityCount || DesCity >= cityCount) {
+                    System.out.println("Invalid selection !");
+                    return;
+                }
+
+                System.out.print("Enter the Weight of the Package(kg): ");
+                int Weight = scan.nextInt();
+                scan.nextLine();
+
+                //show vehicle capacities to before chose a vehicle
+                System.out.println("\n ..............Vehicle capacities.............");
+                for (int i = 0; i < 3; i++) {
+                    System.out.printf(vehicleNames[i] + " - ");
+                    System.out.printf(capacity[i] + " Kg    ");
+                }
+                System.out.println("\n");
+
+                System.out.print("Select vehicle (1.Van 2.Truck 3.Lorry): ");
+                int vehicle = scan.nextInt() - 1;
+                scan.nextLine();
+
+                if (vehicle < 0 || vehicle > 2) {
+                    System.out.println("Invalid selection ! Please select valid Number.");
+                    return;
+                }
+                if (Weight > capacity[vehicle]) {
+                    System.out.println("Your package Weight exceeds the vehicle capacity ! \n Please choose another vehicle type !");
+                    return;
+                }
+
+                // find least distance
+                int dist = findShortestPath(SCity, DesCity);
+                if (dist >= 999999) {
+                    System.out.println("No route available.");
+                    return;
+                }
+
+                // calculate costs
+                double base = dist * ratePerKm[vehicle] * (1 + (double) Weight / 10000.0);
+                double time = (double) dist / avgSpeed[vehicle];
+                double fuel = (double) dist / FuelEfficiency[vehicle];
+                double fCost = fuel * FUEL_PRICE;
+                double total = base + fCost;
+                double prof = base * 0.25;
+                double charge = total + prof;
+
+                System.out.println("\n");
+
+                System.out.println("==================================================");
+                System.out.println("\n DELIVERY COST  ESTIMATION ");
+                System.out.println("--------------------------------------------------\n");
+                System.out.println("From: " + cities[SCity]);
+                System.out.println("To: " + cities[DesCity]);
+                System.out.println("Minimum Distance: " + dist + " km");
+                System.out.println("Vehicle: " + vehicleNames[vehicle]);
+                System.out.println("Weight: " + Weight);
+                System.out.println("\n------------------------------------------------\n");
+
+                System.out.printf("Base Cost: %.2f LKR \n", base);
+                System.out.printf("Fuel Cost: %.2f LKR \n", fCost);
+                System.out.printf("Fuel Used: %.2f LKR \n", fuel);
+                System.out.printf("Operational Cost: %.2f LKR \n", total);
+                System.out.printf("Profit: %.2f LKR\n", prof);
+                System.out.printf("Customer Charge: %.2f LKR \n", charge);
+                System.out.printf("Estimated Time: %.2f hours \n", time);
+                System.out.println("\n==================================================");
+
+                System.out.print("Save delivery? (y/n): ");
+                String ans = scan.nextLine();
+
+                if (ans != null && ans.toLowerCase().equals("y") && deliveryCount < MAX_DELIVERY_ITEMS) {
+                    fromCity[deliveryCount] = SCity;
+                    toCity[deliveryCount] = DesCity;
+                    distance[deliveryCount] = dist;
+                    vehicleType[deliveryCount] = vehicle;
+                    weight[deliveryCount] = Weight;
+                    baseCost[deliveryCount] = base;
+                    fuelUsed[deliveryCount] = fuel;
+                    fuelCost[deliveryCount] = fCost;
+                    totalCost[deliveryCount] = total;
+                    profit[deliveryCount] = prof;
+                    customerCharge[deliveryCount] = charge;
+                    timeTaken[deliveryCount] = time;
+                    route[deliveryCount] = cities[SCity] + " -> " + cities[DesCity];
+                    deliveryCount++;
+                    System.out.println("Delivery saved!");
+                } else {
+                    System.out.println("Order Cannot Delivary !");
+                }
+
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
             }
-
-            System.out.println("\n.........Order details .........\n");
-
-            listCities(); // show all cities 
-
-            System.out.print("Enter the index of Source City: ");
-            int SCity = scan.nextInt() - 1;
-            scan.nextLine(); // consume newline
-
-            System.out.print("Enter the index of Desination City: ");
-            int DesCity = scan.nextInt() - 1;
-            scan.nextLine(); // consume newline
-
-            if (SCity == DesCity || SCity < 0 || DesCity < 0 || SCity >= cityCount || DesCity >= cityCount) {
-                System.out.println("Invalid selection !");
-                return;
-            }
-
-            System.out.print("Enter the Weight of the Package(kg): ");
-            int Weight = scan.nextInt();
-            scan.nextLine();
-
-            //show vehicle capacities to before chose a vehicle
-            System.out.println("\n ..............Vehicle capacities.............");
-            for (int i = 0; i < 3; i++) {
-                System.out.printf(vehicleNames[i] + " - ");
-                System.out.printf(capacity[i] + " Kg    ");
-            }
-            System.out.println("\n");
-
-            System.out.print("Select vehicle (1.Van 2.Truck 3.Lorry): ");
-            int vehicle = scan.nextInt() - 1;
-            scan.nextLine();
-
-            if (vehicle < 0 || vehicle > 2) {
-                System.out.println("Invalid selection ! Please select valid Number.");
-                return;
-            }
-            if (Weight > capacity[vehicle]) {
-                System.out.println("Your package Weight exceeds the vehicle capacity ! \n Please choose another vehicle type !");
-                return;
-            }
-
-            // find least distance
-            int dist = findShortestPath(SCity, DesCity);
-            if (dist >= 999999) {
-                System.out.println("No route available.");
-                return;
-            }
-
-            // calculate costs
-            double base = dist * ratePerKm[vehicle] * (1 + (double) Weight / 10000.0);
-            double time = (double) dist / avgSpeed[vehicle];
-            double fuel = (double) dist / FuelEfficiency[vehicle];
-            double fCost = fuel * FUEL_PRICE;
-            double total = base + fCost;
-            double prof = base * 0.25;
-            double charge = total + prof;
-
-            System.out.println("\n");
-
-            System.out.println("==================================================");
-            System.out.println("\n DELIVERY COST  ESTIMATION ");
-            System.out.println("--------------------------------------------------\n");
-            System.out.println("From: " + cities[SCity]);
-            System.out.println("To: " + cities[DesCity]);
-            System.out.println("Minimum Distance: " + dist + " km");
-            System.out.println("Vehicle: " + vehicleNames[vehicle]);
-            System.out.println("Weight: " + Weight);
-            System.out.println("\n------------------------------------------------\n");
-
-            System.out.printf("Base Cost: %.2f LKR \n", base);
-            System.out.printf("Fuel Cost: %.2f LKR \n", fCost);
-            System.out.printf("Fuel Used: %.2f LKR \n", fuel);
-            System.out.printf("Operational Cost: %.2f LKR \n", total);
-            System.out.printf("Profit: %.2f LKR\n", prof);
-            System.out.printf("Customer Charge: %.2f LKR \n", charge);
-            System.out.printf("Estimated Time: %.2f hours \n", time);
-            System.out.println("\n==================================================");
-
-            System.out.print("Save delivery? (y/n): ");
-            String ans = scan.nextLine();
-
-            if (ans != null && ans.toLowerCase().equals("y") && deliveryCount < MAX_DELIVERY_ITEMS) {
-                fromCity[deliveryCount] = SCity;
-                toCity[deliveryCount] = DesCity;
-                distance[deliveryCount] = dist;
-                vehicleType[deliveryCount] = vehicle;
-                weight[deliveryCount] = Weight;
-                baseCost[deliveryCount] = base;
-                fuelUsed[deliveryCount] = fuel;
-                fuelCost[deliveryCount] = fCost;
-                totalCost[deliveryCount] = total;
-                profit[deliveryCount] = prof;
-                customerCharge[deliveryCount] = charge;
-                timeTaken[deliveryCount] = time;
-                route[deliveryCount] = cities[SCity] + " -> " + cities[DesCity];
-                deliveryCount++;
-                System.out.println("Delivery saved!");
-            } else {
-                System.out.println("Order Cannot Delivary !");
-            }
-
         }
 
     }
@@ -517,8 +553,8 @@ public class Logistics_Management_System {
     //File Handling 
     //function for save  City list and distance matrix
     static void saveRoutes() {
-        try {
-            FileWriter write = new FileWriter("routes.txt");
+        try(FileWriter write = new FileWriter("routes.txt")) {
+            
             write.write(cityCount);
 
             for (int i = 0; i < cityCount; i++) {
@@ -538,7 +574,7 @@ public class Logistics_Management_System {
             write.close();
             System.out.println("routes.txt Successfully saved.");
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println(e.getMessage() + "Error saving routes.");
         }
     }
@@ -551,9 +587,10 @@ public class Logistics_Management_System {
         if (!file.exists()) {
             return;
         }
-        try {
-            Scanner scanner = new Scanner(file);
+        try (Scanner scanner = new Scanner(file)) {
+
             cityCount = Integer.parseInt(scanner.nextLine().trim());
+
             for (int i = 0; i < cityCount; i++) {
                 cities[i] = scanner.nextLine();
             }
@@ -567,16 +604,15 @@ public class Logistics_Management_System {
 
             System.out.println("routes.txt loaded Successfully.");
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println(e.getMessage() + " Error loading routes.");
         }
     }
 
     //function for save delivery history
     static void saveDeliveries() {
-        try {
 
-            PrintWriter pw = new PrintWriter("deliveries.txt");
+        try (PrintWriter pw = new PrintWriter("deliveries.txt")) {
 
             for (int i = 0; i < deliveryCount; i++) {
                 pw.printf("%d,%d,%d,%d,%d,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%s\n",
@@ -588,12 +624,11 @@ public class Logistics_Management_System {
 
             System.out.println("deliveries.txt saved.");
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("Error saving deliveries.");
         }
     }
 
-    
     //function for loading saved deliveries
     static void loadDeliveries() {
 
@@ -603,8 +638,7 @@ public class Logistics_Management_System {
             return;
         }
 
-        try {
-            Scanner sc = new Scanner(file);
+        try (Scanner sc = new Scanner(file)) {
 
             while (sc.hasNextLine() && deliveryCount < MAX_DELIVERY_ITEMS) {
                 String[] p = sc.nextLine().split(",");
@@ -626,8 +660,8 @@ public class Logistics_Management_System {
 
             System.out.println("deliveries.txt loaded Successfully.");
 
-        } catch (Exception e) {
-            System.out.println("Error loading deliveries.");
+        } catch (IOException e) {
+            System.out.println("Error loading deliveries." + e.getMessage());
         }
     }
 
