@@ -18,8 +18,6 @@ public class Logistics_Management_System {
     static int cityCount = 0;
     static String[] cities = new String[MAX_CITY_COUNT];
 
-    static Scanner scan = new Scanner(System.in);
-
     // Distance Management 
     static int[][] interCityDistance = new int[MAX_CITY_COUNT][MAX_CITY_COUNT];
 
@@ -34,6 +32,36 @@ public class Logistics_Management_System {
             }
         }
     }
+
+    //Vehicle Management
+    static String[] vehicleNames = {"Van", "Truck", "Lorry"};
+    static int[] capacity = {1000, 5000, 10000};      // kg
+    static int[] ratePerKm = {30, 40, 80};            // LKR per km
+    static int[] avgSpeed = {60, 50, 45};             // km per h
+    static int[] FuelEfficiency = {12, 6, 4};         // km per l
+
+    static final double FUEL_PRICE = 310.0;
+
+    //delivery management
+    static final int MAX_DELIVERY_ITEMS = 50;
+    static int deliveryCount = 0;
+
+    //To store 50 deliveries maximum
+    static int[] fromCity = new int[MAX_DELIVERY_ITEMS];
+    static int[] toCity = new int[MAX_DELIVERY_ITEMS];
+    static int[] distance = new int[MAX_DELIVERY_ITEMS];
+    static int[] vehicleType = new int[MAX_DELIVERY_ITEMS];
+    static int[] weight = new int[MAX_DELIVERY_ITEMS];
+    static double[] baseCost = new double[MAX_DELIVERY_ITEMS];
+    static double[] fuelUsed = new double[MAX_DELIVERY_ITEMS];
+    static double[] fuelCost = new double[MAX_DELIVERY_ITEMS];
+    static double[] totalCost = new double[MAX_DELIVERY_ITEMS];
+    static double[] profit = new double[MAX_DELIVERY_ITEMS];
+    static double[] customerCharge = new double[MAX_DELIVERY_ITEMS];
+    static double[] timeTaken = new double[MAX_DELIVERY_ITEMS];
+    static String[] route = new String[MAX_DELIVERY_ITEMS];
+
+    static Scanner scan = new Scanner(System.in);
 
     //main method
     public static void main(String[] args) {
@@ -61,7 +89,7 @@ public class Logistics_Management_System {
                     manageDistances();
                     break;
                 case 3:
-                    //delivary request
+                    createDelivery();
                     break;
                 case 4:
                     //show reports
@@ -155,6 +183,7 @@ public class Logistics_Management_System {
         for (int i = 0; i < cityCount; i++) {
             System.out.println((i + 1) + " - " + cities[i]);
         }
+        System.out.println("");
     }
 
     //function for rename a city name
@@ -211,6 +240,7 @@ public class Logistics_Management_System {
             System.out.println("..................................");
 
             System.out.print("Enter your choice: ");
+            System.out.println("\n");
             int input = scan.nextInt();
             scan.nextLine(); // consume newline
 
@@ -261,10 +291,11 @@ public class Logistics_Management_System {
         System.out.println("Distance updated.");
     }
 
-    //function for show distance
+    //function for show intercity distance
     static void showDistanceTable() {
 
-        System.out.print(" \n  ......intercity distances......");
+        System.out.print(" \n  ......Intercity Distances......\n");
+        System.out.print("      ");
 
         for (int j = 0; j < cityCount; j++) {
             System.out.printf("%10s", cities[j]);
@@ -287,4 +318,58 @@ public class Logistics_Management_System {
         }
     }
 
+    //function for create a Request Handling
+    static void createDelivery() {
+
+        while (true) {
+            if (cityCount < 2) {
+                System.out.println("Add minimum 2 or more cities first!");
+                return;
+            }
+            
+            System.out.println("\n.........Order details .........\n");
+            
+            listCities(); // show all cities 
+
+            System.out.print("Enter the index of Source City: ");
+            int SCity = scan.nextInt() - 1;
+            scan.nextLine(); // consume newline
+
+            System.out.print("Enter the index of Desination City: ");
+            int DesCity = scan.nextInt() - 1;
+            scan.nextLine(); // consume newline
+
+            if (SCity == DesCity || SCity < 0 || DesCity < 0 || SCity >= cityCount || DesCity >= cityCount) {
+                System.out.println("Invalid selection !");
+                return;
+            }
+
+            System.out.print("Enter the Weight of the Package(kg): ");
+            int Weight = scan.nextInt();
+            scan.nextLine();
+
+            //show vehicle capacities to before chose a vehicle
+            System.out.println("\n ..............Vehicle capacities.............");
+            for (int i = 0; i < 3; i++) {
+                System.out.printf(vehicleNames[i] + " - ");
+                System.out.printf(capacity[i] + " Kg    ");
+            }
+            System.out.println("\n");
+
+            System.out.print("Select vehicle (1.Van 2.Truck 3.Lorry): ");
+            int vehicle = scan.nextInt() - 1;
+            scan.nextLine();
+
+            if (vehicle < 0 || vehicle > 2) {
+                System.out.println("Invalid selection ! Please select valid Number.");
+                return;
+            }
+            if (Weight > capacity[vehicle]) {
+                System.out.println("Your package Weight exceeds the vehicle capacity ! \n Please choose another vehicle type !");
+                return;
+            }
+
+        }
+
+    }
 }
