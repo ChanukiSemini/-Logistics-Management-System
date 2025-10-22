@@ -13,16 +13,35 @@ import java.util.Scanner;
  */
 public class Logistics_Management_System {
 
-    // City managemnet
+    // City managemnet 
     static final int MAX_CITY_COUNT = 30;
     static int cityCount = 0;
     static String[] cities = new String[MAX_CITY_COUNT];
 
     static Scanner scan = new Scanner(System.in);
 
+    // Distance Management 
+    static int[][] interCityDistance = new int[MAX_CITY_COUNT][MAX_CITY_COUNT];
+
+    static void setSelfDistance() {
+        for (int i = 0; i < MAX_CITY_COUNT; i++) {
+            for (int j = 0; j < MAX_CITY_COUNT; j++) {
+                if (i == j) {
+                    interCityDistance[i][j] = 0; //Prevent distance from city → itself (set as 0)
+                } else {
+                    interCityDistance[i][j] = 999999;
+                }
+            }
+        }
+    }
+
+    //main method
     public static void main(String[] args) {
 
+        setSelfDistance();
+
         while (true) {
+
             System.out.println("\n ==== LOGISTICS MANAGEMENT SYSTEM ====");
             System.out.println("|                                     |");
             System.out.println("|   1. City Management                |");
@@ -34,13 +53,28 @@ public class Logistics_Management_System {
             System.out.print("Enter your choice: ");
             int choice = scan.nextInt();
 
-            if (choice == 1) {
-                manageCities();
-            } else if (choice == 5) {
-                break;
-            } else {
-                //return;
+            switch (choice) {
+                case 1:
+                    manageCities();
+                    break;
+                case 2:
+                    manageDistances();
+                    break;
+                case 3:
+                    //delivary request
+                    break;
+                case 4:
+                    //show reports
+                    break;
+                case 5:
+                    return;
+                //System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
+
             }
+
         }
 
     }
@@ -49,8 +83,9 @@ public class Logistics_Management_System {
     static void manageCities() {
 
         while (true) {
+
             System.out.println("\n................................");
-            System.out.println("        --- City Management ---       ");
+            System.out.println("        --- City Management ---       \n");
             System.out.println(" 1. Add City                          ");
             System.out.println(" 2. Rename City                      ");
             System.out.println(" 3. Remove City                       ");
@@ -59,23 +94,29 @@ public class Logistics_Management_System {
             System.out.println("..................................");
             System.out.print("Enter your choice: ");
 
-            int c = scan.nextInt();
+            int input = scan.nextInt();
             scan.nextLine(); // consume newline
 
-            if (c == 1) {
-                addCity();
-            } else if (c == 2) {
-                renameCity();
-            } else if (c == 3) {
-                removeCity();
-            } else if (c == 4) {
-                listCities();
-            } else if (c == 5) {
-                //  back to main menu
-                break;
-            } else {
-                System.out.println("Invalid choice. Please try again.");
+            switch (input) {
+                case 1:
+                    addCity();
+                    break;
+                case 2:
+                    renameCity();
+                    break;
+                case 3:
+                    removeCity();
+                    break;
+                case 4:
+                    listCities();
+                    break;
+                case 5:
+                    return; //  back to main menu
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    break;
             }
+
         }
     }
 
@@ -156,6 +197,94 @@ public class Logistics_Management_System {
 
         cityCount--;
         System.out.println("city Removed.");
+    }
+
+    // Distance Management 
+    static void manageDistances() {
+
+        while (true) {
+            System.out.println("\n................................");
+            System.out.println("    --- Distance Management ---    \n");
+            System.out.println("  1. Add/Edit Distance              ");
+            System.out.println("  2. Show Distance Table            ");
+            System.out.println("  3. Back to Main Menu                 ");
+            System.out.println("..................................");
+
+            System.out.print("Enter your choice: ");
+            int input = scan.nextInt();
+            scan.nextLine(); // consume newline
+
+            switch (input) {
+                case 1:
+                    editDistance();
+                    break;
+                case 2:
+                    showDistanceTable();
+                    break;
+                case 3:
+                    return;
+                default:
+                    System.out.println("Invalid.");
+                    break;
+            }
+        }
+    }
+
+    //function for edit distance
+    static void editDistance() {
+
+        if (cityCount < 2) {
+            System.out.println("Need  atleast 2 cities to Add distance !");
+            return;
+        }
+        listCities();
+
+        System.out.print("Source City index: ");
+        int SourceCity = scan.nextInt() - 1;
+        scan.nextLine(); // consume newline
+
+        System.out.print("Destination City index: ");
+        int DesCity = scan.nextInt() - 1;
+        scan.nextLine(); // consume newline
+
+        if (SourceCity < 0 || SourceCity >= cityCount || DesCity < 0 || DesCity >= cityCount || SourceCity == DesCity) {
+            System.out.println("Invalid Input !.");
+            return;
+        }
+        System.out.print("Enter distance (km): ");
+        int distance = scan.nextInt();
+        scan.nextLine(); // consume newline
+
+        interCityDistance[SourceCity][DesCity] = distance;
+        interCityDistance[DesCity][SourceCity] = distance;
+
+        System.out.println("Distance updated.");
+    }
+
+    //function for show distance
+    static void showDistanceTable() {
+
+        System.out.print(" \n  ......intercity distances......");
+
+        for (int j = 0; j < cityCount; j++) {
+            System.out.printf("%10s", cities[j]);
+        }
+        System.out.println();
+
+        for (int i = 0; i < cityCount; i++) {
+
+            System.out.printf("%-6s", cities[i]);
+
+            for (int j = 0; j < cityCount; j++) {
+                if (interCityDistance[i][j] >= 999999) {
+                    System.out.printf("%10s", "-");
+                } else {
+                    System.out.printf("%10d", interCityDistance[i][j]);
+                }
+            }
+
+            System.out.println();
+        }
     }
 
 }
