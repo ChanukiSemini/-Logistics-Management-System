@@ -7,6 +7,8 @@ package logistics_management_system;
 
 import java.util.Scanner;
 import java.io.*;
+import java.util.InputMismatchException;
+
 
 /**
  *
@@ -84,6 +86,7 @@ public class Logistics_Management_System {
                 System.out.println("|   5. Save and Exit                  |");
                 System.out.println(" -------------------------------------");
                 System.out.print("Enter your choice: ");
+
                 int choice = scan.nextInt();
 
                 switch (choice) {
@@ -111,6 +114,9 @@ public class Logistics_Management_System {
                         break;
 
                 }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a number between 1-5.");
+                scan.nextLine();
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
             }
@@ -155,9 +161,13 @@ public class Logistics_Management_System {
                         System.out.println("Invalid choice. Please try again.");
                         break;
                 }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a number between 1-5.");
+                scan.nextLine();
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
             }
+
         }
     }
 
@@ -288,9 +298,13 @@ public class Logistics_Management_System {
                         break;
                 }
 
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a number between 1-3.");
+                scan.nextLine();
             } catch (Exception e) {
                 System.out.println("Error: " + e.getMessage());
             }
+
         }
     }
 
@@ -553,8 +567,8 @@ public class Logistics_Management_System {
     //File Handling 
     //function for save  City list and distance matrix
     static void saveRoutes() {
-        try(FileWriter write = new FileWriter("routes.txt")) {
-            
+        try (FileWriter write = new FileWriter("routes.txt")) {
+
             write.write(cityCount);
 
             for (int i = 0; i < cityCount; i++) {
