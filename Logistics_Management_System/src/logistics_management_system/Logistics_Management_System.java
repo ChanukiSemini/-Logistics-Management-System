@@ -6,6 +6,7 @@
 package logistics_management_system;
 
 import java.util.Scanner;
+import java.io.*;
 
 /**
  *
@@ -96,6 +97,9 @@ public class Logistics_Management_System {
                     showReports();
                     break;
                 case 5:
+                    saveRoutes();
+
+                    System.out.println("Saved and Exit.");
                     return;
                 //System.exit(0);
                 default:
@@ -496,14 +500,44 @@ public class Logistics_Management_System {
         }
 
         System.out.println("Total Distance: " + totalDist + " km");
-        
+
         if (deliveryCount > 0) {
             System.out.printf("Average Time: %.2f hours \n", totalTime / deliveryCount);
             System.out.printf("Total Profit: %.2f LKR  \n", totalProfit);
             System.out.printf("Total Revenue: %.2f LKR   \n", totalRevenue);
             System.out.println("Longest Route: " + longRoute + " (" + longest + " km)");
             System.out.println("Shortest Route: " + shortRoute + " (" + shortest + " km)");
+
+        }
+    }
+
+    //File Handling 
+    
+    //function for save  City list and distance matrix
+    static void saveRoutes() {
+        try {
+            FileWriter write = new FileWriter("routes.txt");
+            write.write(cityCount);
             
+            for (int i = 0; i < cityCount; i++) {
+                write.write(cities[i]);
+            }
+            for (int i = 0; i < cityCount; i++) {
+                for (int j = 0; j < cityCount; j++) {
+                    
+                    write.write(interCityDistance[i][j]);
+                    
+                    if (j < cityCount - 1) {
+                        write.write(",");
+                    }
+                }
+                write.write("");
+            }
+            write.close();
+            System.out.println("routes.txt saved.");
+            
+        } catch (Exception e) {
+            System.out.println("Error saving routes.");
         }
     }
 
