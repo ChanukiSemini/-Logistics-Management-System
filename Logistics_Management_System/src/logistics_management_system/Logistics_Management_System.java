@@ -240,10 +240,10 @@ public class Logistics_Management_System {
             System.out.println("  3. Back to Main Menu                 ");
             System.out.println("..................................");
 
-            System.out.print("Enter your choice: ");
-            System.out.println("\n");
+            System.out.print("Enter your choice: ");          
             int input = scan.nextInt();
             scan.nextLine(); // consume newline
+            System.out.println("\n");
 
             switch (input) {
                 case 1:
@@ -385,7 +385,8 @@ public class Logistics_Management_System {
             double total = base + fCost;
             double prof = base * 0.25;
             double charge = total + prof;
-
+            
+            System.out.println("\n");
             
             System.out.println("==================================================");
             System.out.println("\n DELIVERY COST  ESTIMATION ");
