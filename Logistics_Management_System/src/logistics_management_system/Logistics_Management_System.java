@@ -376,10 +376,59 @@ public class Logistics_Management_System {
                 System.out.println("No route available.");
                 return;
             }
-            
-            System.out.println("Min Distance" + dist);
-            // 
 
+            // calculate costs
+            double base = dist * ratePerKm[vehicle] * (1 + (double) Weight / 10000.0);
+            double time = (double) dist / avgSpeed[vehicle];
+            double fuel = (double) dist / FuelEfficiency[vehicle];
+            double fCost = fuel * FUEL_PRICE;
+            double total = base + fCost;
+            double prof = base * 0.25;
+            double charge = total + prof;
+
+            
+            System.out.println("==================================================");
+            System.out.println("\n DELIVERY COST  ESTIMATION ");
+            System.out.println("--------------------------------------------------\n");
+            System.out.println("From: " + cities[SCity]);
+            System.out.println("To: " + cities[DesCity]);
+            System.out.println("Minimum Distance: " + dist + " km");
+            System.out.println("Vehicle: " + vehicleNames[vehicle]);
+            System.out.println("Weight: " + Weight);
+            System.out.println("\n------------------------------------------------\n");
+            
+            System.out.printf("Base Cost: %.2f LKR \n", base);
+            System.out.printf("Fuel Cost: %.2f LKR \n", fCost);
+            System.out.printf("Fuel Used: %.2f LKR \n", fuel);
+            System.out.printf("Operational Cost: %.2f LKR \n", total);
+            System.out.printf("Profit: %.2f LKR\n", prof);
+            System.out.printf("Customer Charge: %.2f LKR \n", charge);
+            System.out.printf("Estimated Time: %.2f hours \n", time);
+            System.out.println("\n==================================================");
+
+            System.out.print("Save delivery? (y/n): ");
+            String ans = scan.nextLine();
+            
+            if (ans != null && ans.toLowerCase().equals("y") && deliveryCount < MAX_DELIVERY_ITEMS) {
+                fromCity[deliveryCount] = SCity;
+                toCity[deliveryCount] = DesCity;
+                distance[deliveryCount] = dist;
+                vehicleType[deliveryCount] = vehicle;
+                weight[deliveryCount] = Weight;
+                baseCost[deliveryCount] = base;
+                fuelUsed[deliveryCount] = fuel;
+                fuelCost[deliveryCount] = fCost;
+                totalCost[deliveryCount] = total;
+                profit[deliveryCount] = prof;
+                customerCharge[deliveryCount] = charge;
+                timeTaken[deliveryCount] = time;
+                route[deliveryCount] = cities[SCity] + " -> " + cities[DesCity];
+                deliveryCount++;
+                System.out.println("Delivery saved!");
+            }
+            else{
+                System.out.println("Order Cannot Delivary !");
+            }
 
         }
 
