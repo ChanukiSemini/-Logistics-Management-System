@@ -99,7 +99,8 @@ public class Logistics_Management_System {
                     break;
                 case 5:
                     saveRoutes();
-
+                    saveDeliveries();
+                    
                     System.out.println("Saved and Exit.");
                     return;
                 //System.exit(0);
@@ -514,7 +515,6 @@ public class Logistics_Management_System {
 
     //File Handling 
     //function for save  City list and distance matrix
-    
     static void saveRoutes() {
         try {
             FileWriter write = new FileWriter("routes.txt");
@@ -537,16 +537,16 @@ public class Logistics_Management_System {
             write.close();
             System.out.println("routes.txt Successfully saved.");
 
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage() + "Error saving routes.");
         }
     }
 
-    
-    
     //function for load saved routed when starting the program
     static void loadRoutes() {
+
         File file = new File("routes.txt");
+
         if (!file.exists()) {
             return;
         }
@@ -563,9 +563,32 @@ public class Logistics_Management_System {
                 }
             }
             scanner.close();
+
             System.out.println("routes.txt loaded Successfully.");
-        } catch(Exception e) {
-            System.out.println( e.getMessage() +" Error loading routes.");
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage() + " Error loading routes.");
+        }
+    }
+
+    //function for save delivery history
+    static void saveDeliveries() {
+        try {
+
+            PrintWriter pw = new PrintWriter("deliveries.txt");
+
+            for (int i = 0; i < deliveryCount; i++) {
+                pw.printf("%d,%d,%d,%d,%d,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%s\n",
+                        fromCity[i], toCity[i], distance[i], vehicleType[i], weight[i],
+                        baseCost[i], fuelUsed[i], fuelCost[i], totalCost[i],
+                        profit[i], customerCharge[i], route[i]);
+            }
+            pw.close();
+
+            System.out.println("deliveries.txt saved.");
+
+        } catch (Exception e) {
+            System.out.println("Error saving deliveries.");
         }
     }
 
