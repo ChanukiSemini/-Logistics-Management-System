@@ -68,7 +68,8 @@ public class Logistics_Management_System {
     //main method
     public static void main(String[] args) {
 
-        setSelfDistance();
+        setSelfDistance(); // for set distance as 0 for  in 2D Array
+        loadRoutes();       // load the saved routes
 
         while (true) {
 
@@ -287,11 +288,11 @@ public class Logistics_Management_System {
             return;
         }
         System.out.print("Enter distance (km): ");
-        int distance = scan.nextInt();
+        int dist = scan.nextInt();
         scan.nextLine(); // consume newline
 
-        interCityDistance[SourceCity][DesCity] = distance;
-        interCityDistance[DesCity][SourceCity] = distance;
+        interCityDistance[SourceCity][DesCity] = dist;
+        interCityDistance[DesCity][SourceCity] = dist;
 
         System.out.println("Distance updated.");
     }
@@ -512,21 +513,21 @@ public class Logistics_Management_System {
     }
 
     //File Handling 
-    
     //function for save  City list and distance matrix
+    
     static void saveRoutes() {
         try {
             FileWriter write = new FileWriter("routes.txt");
             write.write(cityCount);
-            
+
             for (int i = 0; i < cityCount; i++) {
                 write.write(cities[i]);
             }
             for (int i = 0; i < cityCount; i++) {
                 for (int j = 0; j < cityCount; j++) {
-                    
+
                     write.write(interCityDistance[i][j]);
-                    
+
                     if (j < cityCount - 1) {
                         write.write(",");
                     }
@@ -534,10 +535,37 @@ public class Logistics_Management_System {
                 write.write("");
             }
             write.close();
-            System.out.println("routes.txt saved.");
-            
-        } catch (Exception e) {
-            System.out.println("Error saving routes.");
+            System.out.println("routes.txt Successfully saved.");
+
+        } catch(Exception e) {
+            System.out.println(e.getMessage() + "Error saving routes.");
+        }
+    }
+
+    
+    
+    //function for load saved routed when starting the program
+    static void loadRoutes() {
+        File file = new File("routes.txt");
+        if (!file.exists()) {
+            return;
+        }
+        try {
+            Scanner scanner = new Scanner(file);
+            cityCount = Integer.parseInt(scanner.nextLine().trim());
+            for (int i = 0; i < cityCount; i++) {
+                cities[i] = scanner.nextLine();
+            }
+            for (int i = 0; i < cityCount; i++) {
+                String[] p = scanner.nextLine().split(",");
+                for (int j = 0; j < cityCount; j++) {
+                    interCityDistance[i][j] = Integer.parseInt(p[j]);
+                }
+            }
+            scanner.close();
+            System.out.println("routes.txt loaded Successfully.");
+        } catch(Exception e) {
+            System.out.println( e.getMessage() +" Error loading routes.");
         }
     }
 
