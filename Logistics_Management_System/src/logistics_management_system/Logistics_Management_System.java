@@ -70,6 +70,7 @@ public class Logistics_Management_System {
 
         setSelfDistance(); // for set distance as 0 for  in 2D Array
         loadRoutes();       // load the saved routes
+        loadDeliveries();  // load saved delivery history
 
         while (true) {
 
@@ -100,7 +101,7 @@ public class Logistics_Management_System {
                 case 5:
                     saveRoutes();
                     saveDeliveries();
-                    
+
                     System.out.println("Saved and Exit.");
                     return;
                 //System.exit(0);
@@ -589,6 +590,44 @@ public class Logistics_Management_System {
 
         } catch (Exception e) {
             System.out.println("Error saving deliveries.");
+        }
+    }
+
+    
+    //function for loading saved deliveries
+    static void loadDeliveries() {
+
+        File file = new File("deliveries.txt");
+
+        if (!file.exists()) {
+            return;
+        }
+
+        try {
+            Scanner sc = new Scanner(file);
+
+            while (sc.hasNextLine() && deliveryCount < MAX_DELIVERY_ITEMS) {
+                String[] p = sc.nextLine().split(",");
+                fromCity[deliveryCount] = Integer.parseInt(p[0]);
+                toCity[deliveryCount] = Integer.parseInt(p[1]);
+                distance[deliveryCount] = Integer.parseInt(p[2]);
+                vehicleType[deliveryCount] = Integer.parseInt(p[3]);
+                weight[deliveryCount] = Integer.parseInt(p[4]);
+                baseCost[deliveryCount] = Double.parseDouble(p[5]);
+                fuelUsed[deliveryCount] = Double.parseDouble(p[6]);
+                fuelCost[deliveryCount] = Double.parseDouble(p[7]);
+                totalCost[deliveryCount] = Double.parseDouble(p[8]);
+                profit[deliveryCount] = Double.parseDouble(p[9]);
+                customerCharge[deliveryCount] = Double.parseDouble(p[10]);
+                route[deliveryCount] = p[11];
+                deliveryCount++;
+            }
+            sc.close();
+
+            System.out.println("deliveries.txt loaded Successfully.");
+
+        } catch (Exception e) {
+            System.out.println("Error loading deliveries.");
         }
     }
 
