@@ -93,7 +93,7 @@ public class Logistics_Management_System {
                     createDelivery();
                     break;
                 case 4:
-                    //show reports
+                    showReports();
                     break;
                 case 5:
                     return;
@@ -240,7 +240,7 @@ public class Logistics_Management_System {
             System.out.println("  3. Back to Main Menu                 ");
             System.out.println("..................................");
 
-            System.out.print("Enter your choice: ");          
+            System.out.print("Enter your choice: ");
             int input = scan.nextInt();
             scan.nextLine(); // consume newline
             System.out.println("\n");
@@ -385,9 +385,9 @@ public class Logistics_Management_System {
             double total = base + fCost;
             double prof = base * 0.25;
             double charge = total + prof;
-            
+
             System.out.println("\n");
-            
+
             System.out.println("==================================================");
             System.out.println("\n DELIVERY COST  ESTIMATION ");
             System.out.println("--------------------------------------------------\n");
@@ -397,7 +397,7 @@ public class Logistics_Management_System {
             System.out.println("Vehicle: " + vehicleNames[vehicle]);
             System.out.println("Weight: " + Weight);
             System.out.println("\n------------------------------------------------\n");
-            
+
             System.out.printf("Base Cost: %.2f LKR \n", base);
             System.out.printf("Fuel Cost: %.2f LKR \n", fCost);
             System.out.printf("Fuel Used: %.2f LKR \n", fuel);
@@ -409,7 +409,7 @@ public class Logistics_Management_System {
 
             System.out.print("Save delivery? (y/n): ");
             String ans = scan.nextLine();
-            
+
             if (ans != null && ans.toLowerCase().equals("y") && deliveryCount < MAX_DELIVERY_ITEMS) {
                 fromCity[deliveryCount] = SCity;
                 toCity[deliveryCount] = DesCity;
@@ -426,8 +426,7 @@ public class Logistics_Management_System {
                 route[deliveryCount] = cities[SCity] + " -> " + cities[DesCity];
                 deliveryCount++;
                 System.out.println("Delivery saved!");
-            }
-            else{
+            } else {
                 System.out.println("Order Cannot Delivary !");
             }
 
@@ -437,7 +436,7 @@ public class Logistics_Management_System {
 
     //Finding The Least-Cost Route (Least-Distance)
     static int findShortestPath(int src, int dest) {
-        
+
         int n = cityCount;
         int[] d = new int[n];
         boolean[] used = new boolean[n];
@@ -467,6 +466,45 @@ public class Logistics_Management_System {
             }
         }
         return d[dest];
+    }
+
+    // Show Reports 
+    static void showReports() {
+
+        System.out.println("\n-------- Delivery Reports ---------\n");
+        System.out.println("Total Deliveries: " + deliveryCount);
+
+        int totalDist = 0;
+        double totalTime = 0, totalProfit = 0, totalRevenue = 0;
+        int longest = 0, shortest = 999999;
+        String longRoute = "", shortRoute = "";
+
+        for (int i = 0; i < deliveryCount; i++) {
+            totalDist += distance[i];
+            totalTime += timeTaken[i];
+            totalProfit += profit[i];
+            totalRevenue += customerCharge[i];
+
+            if (distance[i] > longest) {
+                longest = distance[i];
+                longRoute = route[i];
+            }
+            if (distance[i] < shortest) {
+                shortest = distance[i];
+                shortRoute = route[i];
+            }
+        }
+
+        System.out.println("Total Distance: " + totalDist + " km");
+        
+        if (deliveryCount > 0) {
+            System.out.printf("Average Time: %.2f hours \n", totalTime / deliveryCount);
+            System.out.printf("Total Profit: %.2f LKR  \n", totalProfit);
+            System.out.printf("Total Revenue: %.2f LKR   \n", totalRevenue);
+            System.out.println("Longest Route: " + longRoute + " (" + longest + " km)");
+            System.out.println("Shortest Route: " + shortRoute + " (" + shortest + " km)");
+            
+        }
     }
 
 }
