@@ -580,7 +580,7 @@ public class Logistics_Management_System {
             // Save city count as text
             write.write(String.valueOf(cityCount) + "\n");
 
-            // Save city names, comma-separated
+            // Save city names by comma separated
             for (int i = 0; i < cityCount; i++) {
                 write.write(cities[i]);
                 if (i < cityCount - 1) {
@@ -620,13 +620,13 @@ public class Logistics_Management_System {
         // Read city count
         cityCount = Integer.parseInt(scanner.nextLine().trim());
 
-        // Read city names (comma-separated)
+        // Read city names 
         String[] cityLine = scanner.nextLine().split(",");
         for (int i = 0; i < cityLine.length; i++) {
             cities[i] = cityLine[i].trim();
         }
 
-        // Read distance matrix
+        
         for (int i = 0; i < cityCount; i++) {
             String[] p = scanner.nextLine().split(",");
             for (int j = 0; j < cityCount; j++) {
